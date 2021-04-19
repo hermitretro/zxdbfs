@@ -1,0 +1,378 @@
+{
+  "_index": "zxinfo-20210403-103141",
+  "_type": "_doc",
+  "_id": "0005795",
+  "_version": 1,
+  "_seq_no": 15019,
+  "_primary_term": 1,
+  "found": true,
+  "_source": {
+    "controls": [
+      {
+        "control": "Cursor"
+      },
+      {
+        "control": "Interface 2 (right)"
+      },
+      {
+        "control": "Kempston"
+      },
+      {
+        "control": "Redefineable keys"
+      }
+    ],
+    "authoring": [],
+    "originalPrice": {
+      "amount": "7.99",
+      "currency": "£"
+    },
+    "bookContents": [],
+    "authoredWith": [],
+    "isbn": null,
+    "language": "English",
+    "availability": "Available",
+    "title": "Xevious",
+    "originalMonthOfRelease": null,
+    "numberOfPlayers": 2,
+    "modificationOf": [],
+    "genreType": "Arcade Game",
+    "score": {
+      "score": 7.08,
+      "votes": 28
+    },
+    "additionalDownloads": [
+      {
+        "path": "/pub/sinclair/games-adverts/x/Xevious.jpg",
+        "size": 168824,
+        "type": "Advertisement",
+        "format": "Picture (JPG)",
+        "language": null
+      },
+      {
+        "path": "/pub/sinclair/games-extras/Xevious_Badge.jpg",
+        "size": 37079,
+        "type": "Badge",
+        "format": "Picture (JPG)",
+        "language": null
+      },
+      {
+        "path": "/pub/sinclair/games-inlays/Rereleases/x/Xevious(DroSoft).jpg",
+        "size": 133588,
+        "type": "Cassette inlay",
+        "format": "Picture (JPG)",
+        "language": null
+      },
+      {
+        "path": "/pub/sinclair/games-inlays/Rereleases/x/Xevious(ErbeSoftwareS.A.).jpg",
+        "size": 50039,
+        "type": "Cassette inlay",
+        "format": "Picture (JPG)",
+        "language": null
+      },
+      {
+        "path": "/pub/sinclair/games-inlays/x/Xevious.jpg",
+        "size": 236446,
+        "type": "Cassette inlay",
+        "format": "Picture (JPG)",
+        "language": null
+      },
+      {
+        "path": "/zxdb/sinclair/entries/0005795/Xevious(AmericanaSoftwareLtd).jpg",
+        "size": 492504,
+        "type": "Cassette inlay",
+        "format": "Picture (JPG)",
+        "language": null
+      },
+      {
+        "path": "/pub/sinclair/games-maps/x/Xevious.png",
+        "size": 201775,
+        "type": "Game map",
+        "format": "Picture (PNG)",
+        "language": null
+      },
+      {
+        "path": "/pub/sinclair/games-info/x/Xevious(ErbeSoftwareS.A.).pdf",
+        "size": 20492,
+        "type": "Instructions",
+        "format": "Document (PDF)",
+        "language": "Spanish"
+      },
+      {
+        "path": "/pub/sinclair/games-info/x/Xevious.txt",
+        "size": 1508,
+        "type": "Instructions",
+        "format": "Document (TXT)",
+        "language": "English"
+      },
+      {
+        "path": "/pub/sinclair/screens/load/x/scr/Xevious.scr",
+        "size": 6912,
+        "type": "Loading screen",
+        "format": "Screen dump (SCR)",
+        "language": null
+      },
+      {
+        "path": "/zxdb/sinclair/pokes/x/Xevious (1987)(US Gold).pok",
+        "size": 116,
+        "type": "POK pokes file",
+        "format": "Pokes (POK)",
+        "language": null
+      },
+      {
+        "path": "/pub/sinclair/screens/in-game/x/Xevious.gif",
+        "size": 3499,
+        "type": "Running screen",
+        "format": "Picture (GIF)",
+        "language": null
+      }
+    ],
+    "screens": [
+      {
+        "filename": "Xevious-load.png",
+        "url": "/zxscreens/0005795/Xevious-load.png",
+        "scrUrl": "/pub/sinclair/screens/load/x/scr/Xevious.scr",
+        "size": 6186,
+        "type": "Loading screen",
+        "format": "Picture",
+        "title": ""
+      },
+      {
+        "filename": "Xevious.gif",
+        "url": "/pub/sinclair/screens/in-game/x/Xevious.gif",
+        "size": 3499,
+        "type": "Running screen",
+        "format": "Picture (GIF)",
+        "title": null
+      }
+    ],
+    "multiplayerMode": "Alternating",
+    "genre": "Arcade Game: Shoot-em-up",
+    "publishers": [
+      {
+        "publisherSeq": 1,
+        "name": "U.S. Gold Ltd",
+        "country": "UK",
+        "labelType": "Company: Publisher/Manager",
+        "notes": [
+          {
+            "text": "3rd Best Software House - 1987 Crash Readers Awards.",
+            "section": "Awards",
+            "noteType": "A"
+          },
+          {
+            "text": "3rd Best Software House - 1990 Crash Readers Awards.",
+            "section": "Awards",
+            "noteType": "A"
+          }
+        ]
+      }
+    ],
+    "otherSystems": [
+      {
+        "name": "Amstrad CPC",
+        "url": "https://www.cpc-power.com/index.php?page=detail&num=1448"
+      },
+      {
+        "name": "Atari 7800",
+        "url": "http://www.atariage.com/software_page.html?SoftwareLabelID=716"
+      },
+      {
+        "name": "Commodore 64",
+        "url": "http://www.lemon64.com/?game_id=2909"
+      },
+      {
+        "name": "NES",
+        "url": null
+      }
+    ],
+    "modifiedBy": [],
+    "contentType": "SOFTWARE",
+    "machineType": "ZX-Spectrum 48K",
+    "originalDayOfRelease": null,
+    "compilationContents": [],
+    "knownErrors": null,
+    "inCompilations": [
+      {
+        "entry_id": 14484,
+        "title": "El Lingote",
+        "publishers": [
+          {
+            "name": "Erbe Software S.A.",
+            "country": "Spain",
+            "labelType": "Company"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K",
+        "type": "Box Set"
+      },
+      {
+        "entry_id": 12092,
+        "title": "Space Ace",
+        "publishers": [
+          {
+            "name": "Gremlin Graphics Software Ltd",
+            "country": "UK",
+            "labelType": "Company: Publisher/Manager"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K",
+        "type": "Compilation"
+      }
+    ],
+    "releases": [
+      {
+        "releaseSeq": 0,
+        "publishers": [
+          {
+            "publisherSeq": 1,
+            "name": "U.S. Gold Ltd",
+            "country": "UK",
+            "labelType": "Company: Publisher/Manager"
+          }
+        ],
+        "releaseTitles": [],
+        "yearOfRelease": 1986,
+        "releasePrice": "£7.99",
+        "budgetPrice": null,
+        "microdrivePrice": null,
+        "diskPrice": null,
+        "cartridgePrice": null,
+        "code": null,
+        "barcode": null,
+        "dl": null,
+        "files": [
+          {
+            "path": "/pub/sinclair/games/x/Xevious.tap.zip",
+            "size": 18492,
+            "type": "Tape image",
+            "format": "Tape (TAP)",
+            "origin": null,
+            "encodingScheme": "Undetermined"
+          },
+          {
+            "path": "/pub/sinclair/games/x/Xevious.tzx.zip",
+            "size": 41485,
+            "type": "Tape image",
+            "format": "Perfect tape (TZX)",
+            "origin": "Original release (O)",
+            "encodingScheme": "Alkatraz Protection System"
+          }
+        ]
+      },
+      {
+        "releaseSeq": 1,
+        "publishers": [
+          {
+            "publisherSeq": 1,
+            "name": "Americana Software Ltd",
+            "country": "UK",
+            "labelType": "Company: Publisher/Manager"
+          }
+        ],
+        "releaseTitles": [],
+        "yearOfRelease": 1987,
+        "releasePrice": "£2.99",
+        "budgetPrice": null,
+        "microdrivePrice": null,
+        "diskPrice": null,
+        "cartridgePrice": null,
+        "code": "AS0003",
+        "barcode": "5012967250225",
+        "dl": null,
+        "files": [
+          {
+            "path": "/pub/sinclair/games/x/Xevious(AmericanaSoftwareLtd).tzx.zip",
+            "size": 41277,
+            "type": "Tape image",
+            "format": "Perfect tape (TZX)",
+            "origin": "Re-release (R)",
+            "encodingScheme": "Alkatraz Protection System"
+          }
+        ]
+      },
+      {
+        "releaseSeq": 2,
+        "publishers": [
+          {
+            "publisherSeq": 1,
+            "name": "Erbe Software S.A.",
+            "country": "Spain",
+            "labelType": "Company"
+          }
+        ],
+        "releaseTitles": [],
+        "yearOfRelease": 1987,
+        "releasePrice": null,
+        "budgetPrice": null,
+        "microdrivePrice": null,
+        "diskPrice": null,
+        "cartridgePrice": null,
+        "code": null,
+        "barcode": null,
+        "dl": "M-39318-1986",
+        "files": [
+          {
+            "path": "/pub/sinclair/games/x/Xevious(ErbeSoftwareS.A.).tzx.zip",
+            "size": 42209,
+            "type": "Tape image",
+            "format": "Perfect tape (TZX)",
+            "origin": "Re-release (R)",
+            "encodingScheme": "Alkatraz Protection System"
+          }
+        ]
+      },
+      {
+        "releaseSeq": 3,
+        "publishers": [
+          {
+            "publisherSeq": 1,
+            "name": "Dro Soft",
+            "country": "Spain",
+            "labelType": "Company"
+          }
+        ],
+        "releaseTitles": [],
+        "yearOfRelease": 1988,
+        "releasePrice": "395 ptas.",
+        "budgetPrice": null,
+        "microdrivePrice": null,
+        "diskPrice": null,
+        "cartridgePrice": null,
+        "code": "2MT136",
+        "barcode": null,
+        "dl": "M-36924-1988",
+        "files": [
+          {
+            "path": "/pub/sinclair/games/x/Xevious(DroSoft).tzx.zip",
+            "size": 14000,
+            "type": "Tape image",
+            "format": "Perfect tape (TZX)",
+            "origin": "Re-release (R)",
+            "encodingScheme": "None"
+          }
+        ]
+      }
+    ],
+    "inBook": [],
+    "series": [],
+    "originalYearOfRelease": 1986,
+    "genreSubType": "Shoot-em-up",
+    "hardwareBlurb": null,
+    "multiplayerType": null,
+    "remarks": null,
+    "authors": [
+      {
+        "type": "Creator",
+        "authorSeq": 1,
+        "name": "Nick Bruty",
+        "country": "UK",
+        "labelType": "Person",
+        "roles": [],
+        "groupName": "Probe Software Ltd",
+        "groupCountry": "UK",
+        "groupType": "Company: Publisher/Manager",
+        "notes": []
+      }
+    ]
+  }
+}

@@ -1,0 +1,248 @@
+{
+  "_index": "zxinfo-20210403-103141",
+  "_type": "_doc",
+  "_id": "0030005",
+  "_version": 1,
+  "_seq_no": 29896,
+  "_primary_term": 1,
+  "found": true,
+  "_source": {
+    "controls": [
+      {
+        "control": "Cursor"
+      },
+      {
+        "control": "Interface 2 (right)"
+      },
+      {
+        "control": "Kempston"
+      }
+    ],
+    "authoring": [
+      {
+        "entry_id": 36497,
+        "title": "HELL YEAH!",
+        "publishers": [
+          {
+            "name": "Andy Precious",
+            "country": null,
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K"
+      },
+      {
+        "entry_id": 30237,
+        "title": "Pixel Quest",
+        "publishers": [
+          {
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K/128K"
+      },
+      {
+        "entry_id": 31490,
+        "title": "Pixel Quest 2000",
+        "publishers": [
+          {
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K/128K"
+      },
+      {
+        "entry_id": 34291,
+        "title": "Pixel Quest Zero",
+        "publishers": [
+          {
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K/128K"
+      },
+      {
+        "entry_id": 30157,
+        "title": "ZEN",
+        "publishers": [
+          {
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 16K/48K"
+      },
+      {
+        "entry_id": 30208,
+        "title": "ZEN II",
+        "publishers": [
+          {
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K"
+      }
+    ],
+    "originalPrice": {
+      "amount": "Free (Freeware)",
+      "currency": "N/A"
+    },
+    "bookContents": [],
+    "authoredWith": [],
+    "isbn": null,
+    "language": "English",
+    "availability": "Available",
+    "title": "JOY",
+    "originalMonthOfRelease": null,
+    "numberOfPlayers": 1,
+    "modificationOf": [],
+    "genreType": "Programming",
+    "score": {
+      "score": null,
+      "votes": null
+    },
+    "additionalDownloads": [
+      {
+        "path": "/zxdb/sinclair/entries/0030005/JOY.txt",
+        "size": 3165,
+        "type": "Instructions",
+        "format": "Document (TXT)",
+        "language": "English"
+      },
+      {
+        "path": "/zxdb/sinclair/entries/0030005/0030005-run-1.scr",
+        "size": 6912,
+        "type": "Running screen",
+        "format": "Screen dump (SCR)",
+        "language": null
+      },
+      {
+        "path": "/zxdb/sinclair/entries/0030005/JOY_SourceCode.zip",
+        "size": 886,
+        "type": "Source code",
+        "format": "Source code package",
+        "language": null
+      }
+    ],
+    "screens": [
+      {
+        "filename": "0030005-run-1.png",
+        "url": "/zxscreens/0030005/0030005-run-1.png",
+        "scrUrl": "/zxdb/sinclair/entries/0030005/0030005-run-1.scr",
+        "size": 1712,
+        "type": "Running screen",
+        "format": "Picture",
+        "title": ""
+      }
+    ],
+    "multiplayerMode": null,
+    "genre": "Programming: General",
+    "publishers": [
+      {
+        "publisherSeq": 1,
+        "name": "Einar Saukas",
+        "country": "Brazil",
+        "labelType": "Person",
+        "notes": []
+      }
+    ],
+    "otherSystems": [],
+    "modifiedBy": [],
+    "contentType": "SOFTWARE",
+    "machineType": "ZX-Spectrum 48K",
+    "originalDayOfRelease": null,
+    "compilationContents": [],
+    "knownErrors": null,
+    "inCompilations": [],
+    "releases": [
+      {
+        "releaseSeq": 0,
+        "publishers": [
+          {
+            "publisherSeq": 1,
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "releaseTitles": [],
+        "yearOfRelease": 2014,
+        "releasePrice": "Free (Freeware)",
+        "budgetPrice": null,
+        "microdrivePrice": null,
+        "diskPrice": null,
+        "cartridgePrice": null,
+        "code": null,
+        "barcode": null,
+        "dl": null,
+        "files": [
+          {
+            "path": "/zxdb/sinclair/entries/0030005/JOY.tap.zip",
+            "size": 1734,
+            "type": "Tape image",
+            "format": "Tape (TAP)",
+            "origin": null,
+            "encodingScheme": null
+          }
+        ]
+      }
+    ],
+    "inBook": [],
+    "series": [
+      {
+        "entry_id": 30005,
+        "title": "JOY",
+        "publishers": [
+          {
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K",
+        "groupName": "JOY"
+      },
+      {
+        "entry_id": 30006,
+        "title": "DEFKEY",
+        "publishers": [
+          {
+            "name": "Einar Saukas",
+            "country": "Brazil",
+            "labelType": "Person"
+          }
+        ],
+        "machineType": "ZX-Spectrum 48K",
+        "groupName": "JOY"
+      }
+    ],
+    "originalYearOfRelease": 2014,
+    "genreSubType": "General",
+    "hardwareBlurb": null,
+    "multiplayerType": null,
+    "remarks": null,
+    "authors": [
+      {
+        "type": "Creator",
+        "authorSeq": 1,
+        "name": "Einar Saukas",
+        "country": "Brazil",
+        "labelType": "Person",
+        "roles": [],
+        "groupName": null,
+        "groupCountry": null,
+        "groupType": null,
+        "notes": []
+      }
+    ]
+  }
+}
