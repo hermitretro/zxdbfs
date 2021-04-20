@@ -23,13 +23,34 @@ This is a very experimental repository. Currently working:
 
 # Building and running
 
+`zxdbfs` has some system requirements.
+
+```
+% cd $HOME
+% sudo apt-get install -y g++ git cmake libcurl4-openssl-dev
+% sudo apt-get install -y googletest
+% git clone https://github.com/hermitretro/zxdbfs.git
+```
+
 This project has a dependency on `libfuse3`. You should install that first
-via whichever package manager (or source build) you prefer.
+via whichever package manager (or source build) you prefer. If you need to
+build from source, follow the instructions with `libfuse3`.
+
+```
+% sudo apt-get install pkg-config meson
+```
+
+* For Ubuntu 18.04, you will need to build from [source](https://github.com/libfuse/libfuse)
+* For Ubuntu 20.04, you can install via `sudo apt-get install -y libfuse3-dev`
+* For other Linuxes/BSD, you will likely need to build from source
+* macOS and Windows are not supported
 
 This project builds using cmake:
 
 ```
+% cd $HOME/zxdbfs
 % mkdir build
+% cd build
 % cmake ..
 % make
 ```
@@ -68,8 +89,8 @@ unmounted or exits.
 ## Throttling
 
 The filesystem will throttle automatically to avoid heavy load onto ZXDB.
-For example, we recommend NOT using commands such as ```find```
-or ```tree```. These will execute deep-trawls on the filesystem and make
+For example, we recommend NOT using commands such as `find`
+or `tree`. These will execute deep-trawls on the filesystem and make
 a large number of requests to ZXDB.
 
 ## UNIX Commands
@@ -83,11 +104,11 @@ The filesystem is organised with two top-level directories.
 
 ### /by-letter
 
-The ```by-letter``` root directory, when listed, will present a set of
+The `by-letter` root directory, when listed, will present a set of
 sub-directories of single letters and numbers. Traversing to a subdirectory
 will list programs starting with the subdirectory name.
 
-The directory names are presented as ```filename_ZXDBID```. Each directory
+The directory names are presented as `filename_ZXDBID`. Each directory
 corresponds to a program entry in ZXDB.
 
 ### /search
@@ -96,11 +117,11 @@ The /search root directory is "magic" and allows you to query ZXDB via a
 file-like interface.
 
 For example, to search for "Gargoyle Games" you should just append the search
-term to the path, e.g., ```/search/Gargoyle\ Games```. This will then execute
-the search and return the games as directories under ```/search/Gargoyle\ Games```.
+term to the path, e.g., `/search/Gargoyle\ Games`. This will then execute
+the search and return the games as directories under `/search/Gargoyle\ Games`.
 
 To see which searches have already occurred, simply list the directories in
-```/search```.
+`/search`.
 
 ### Hidden utility directories
 

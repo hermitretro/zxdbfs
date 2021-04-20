@@ -143,7 +143,7 @@ curl_cleanup:
         curl_easy_cleanup( curl );
 
         if ( chunk != NULL ) {
-            printf( "chunk.size: %d\n", chunk->size );
+            printf( "chunk.size: %ld\n", chunk->size );
             if ( res != CURLE_OK ) {
                 if ( chunk->memory != NULL ) {
                     free( chunk->memory );
