@@ -71,7 +71,7 @@ write_data(void *contents, size_t size, size_t nmemb, void *userp)
     return realsize;
 }
 
-struct MemoryStruct *getURLViacURL( const char *host, const char *path ) {
+struct MemoryStruct *getURLViacURL( const char *host, const char *path, const char *useragent ) {
 
     json_object *rv = NULL;
 
@@ -92,8 +92,15 @@ struct MemoryStruct *getURLViacURL( const char *host, const char *path ) {
         sprintf( fullurl, "%s%s", host, path );
         printf( "fullurl: %s\n", fullurl );
 
+        char luseragent[128];
+        if ( useragent != NULL ) {
+            snprintf( luseragent, sizeof( luseragent ), "User-Agent: %s", useragent );
+        } else {
+            sprintf( luseragent, "User-Agent: zxdbfs" );
+        }
+
         struct curl_slist *headers = NULL; // init to NULL is important
-        headers = curl_slist_append( headers, "User-Agent: zxdbfs" );
+        headers = curl_slist_append( headers, luseragent );
         headers = curl_slist_append( headers, "charsets: utf-8" );
         headers = curl_slist_append( headers, "Accept: text/html,application/xhtml+xml,application/xml,application/json,application/zip;q=0.9,image/webp,*/*;q=0.8" );
 
@@ -166,7 +173,7 @@ curl_cleanup:
  * Return a JSON object either from cache or via cURL. In either case,
  * the cache will be updated
  */
-json_object *getURL( json_object *urlcache, const char *host, const char *path ) {
+json_object *getURL( json_object *urlcache, const char *host, const char *path, const char *useragent ) {
 
     if ( host == NULL || path == NULL ) {
         return NULL;
@@ -188,7 +195,7 @@ json_object *getURL( json_object *urlcache, const char *host, const char *path )
         printf( ">>> NOT USING CACHE\n" );
         /** Make a call to ZXDB */
 
-        struct MemoryStruct *chunk = getURLViacURL( host, path );
+        struct MemoryStruct *chunk = getURLViacURL( host, path, useragent );
         if ( chunk == NULL || chunk->memory == NULL ) {
             return NULL;
         }

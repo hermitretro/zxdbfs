@@ -228,7 +228,7 @@ FSCacheEntry_t *FSCacheEntry_getAndCreateGame( json_object *urlcache,
                                                const char *filepath,
                                                const char *urlhost,
                                                const char *urlpath,
-                                               int forceFetch ) {
+                                               const char *useragent ) {
 
     //FSCacheEntry_t *gameRoot = NULL;
 
@@ -259,7 +259,7 @@ FSCacheEntry_t *FSCacheEntry_getAndCreateGame( json_object *urlcache,
     printf( "URL: %s\n", url );
     printf( "FS Game Root: %s\n", gamerootpath );
 
-    json_object *gameData = getURL( urlcache, urlhost, url );
+    json_object *gameData = getURL( urlcache, urlhost, url, useragent );
     if ( gameData == NULL ) {
         printf( ">>> FAILED TO RETRIEVE JSON OBJECT\n" );
         return NULL;

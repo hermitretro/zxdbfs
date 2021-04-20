@@ -29,6 +29,6 @@ extern FSCacheEntry_t *FSCacheEntry_getAndCreateSearch( json_object *urlcache,
                                                  const char *filepath,
                                                  const char *urlhost,
                                                  const char *urlpath,
-                                                 int forceFetch );
+                                                 const char *useragent );
 
 #endif /** !_zxdbfs_search_h */

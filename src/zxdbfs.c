@@ -313,7 +313,7 @@ int _readdirByLetterAZ( const char *path,
             sprintf( url, "/games/byletter/%c?contenttype=SOFTWARE&mode=tiny&size=5000&offset=0", letter );
             printf( "by-letter URL: %s\n", url );
 
-            json_object *urlobj = getURL( urlcache, options.zxdbrooturl, url );
+            json_object *urlobj = getURL( urlcache, options.zxdbrooturl, url, options.useragent );
             if ( urlobj == NULL ) {
                 printf( "Failed to retrieve by-letter data from ZXDB\n" );
                 return -ENODEV;
@@ -715,7 +715,7 @@ static int zxdb_fuse_open(const char *path, struct fuse_file_info *fi)
     }
 
     /** Retrieve the URL via cURL */
-    struct MemoryStruct *chunk = getURLViacURL( rooturl, fscurl );
+    struct MemoryStruct *chunk = getURLViacURL( rooturl, fscurl, options.useragent );
     if ( chunk != NULL ) {
         int fscsize = FSCacheEntry_getsize( fsCacheEntry );
         if ( fscsize != chunk->size ) {
@@ -799,12 +799,12 @@ int main(int argc, char *argv[])
 	   fuse_opt_parse can free the defaults if other
 	   values are specified */
 	options.zxdbrooturl = strdup("https://api.zxinfo.dk/v3");
-	options.cacherootdir = strdup("/home/pi/zxdbfs/cache");
+	options.cacherootdir = strdup("/tmp/zxdbfscache");
     char lcacherooturl[256];
     sprintf( lcacherooturl, "file://%s", options.cacherootdir );
     options.cacherooturl = strdup( lcacherooturl );
     options.localroot = 0;  /** Set to 1 to disable .. at top-level */
-    options.useragent = "zxdbfs";
+    options.useragent = strdup("zxdbfs");
 
 	/* Parse options */
 	if (fuse_opt_parse(&args, &options, option_spec, NULL) == -1)

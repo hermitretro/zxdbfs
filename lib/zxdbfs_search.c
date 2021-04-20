@@ -151,7 +151,7 @@ FSCacheEntry_t *FSCacheEntry_getAndCreateSearch( json_object *urlcache,
                                                  const char *filepath,
                                                  const char *urlhost,
                                                  const char *urlpath,
-                                                 int forceFetch ) {
+                                                 const char *useragent ) {
 
     char searchTerm[128] = { 0 };
     char searchRootPath[256] = { 0 };
@@ -178,7 +178,7 @@ FSCacheEntry_t *FSCacheEntry_getAndCreateSearch( json_object *urlcache,
     printf( "URL: %s\n", url );
 
     /** Retrieve the full search data from ZXDB */
-    json_object *urlobj = getURL( urlcache, urlhost, url );
+    json_object *urlobj = getURL( urlcache, urlhost, url, useragent );
     if ( urlobj == NULL ) {
         printf( "Failed to retrieve search data from ZXDB\n" );
         free( url );

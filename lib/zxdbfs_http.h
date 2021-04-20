@@ -30,7 +30,7 @@ int HTTP_TO_OSCODE( int res );
 
 static size_t write_data(void *contents, size_t size, size_t nmemb, void *userp);
 
-struct MemoryStruct *getURLViacURL( const char *host, const char *path );
-json_object *getURL( json_object *urlcache, const char *host, const char *path );
+struct MemoryStruct *getURLViacURL( const char *host, const char *path, const char *useragent );
+json_object *getURL( json_object *urlcache, const char *host, const char *path, const char *useragent );
 
 #endif /** !_zxdbfs_http_h */

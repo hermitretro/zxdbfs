@@ -32,6 +32,6 @@ extern FSCacheEntry_t *FSCacheEntry_getAndCreateGame( json_object *urlcache,
                                                const char *filepath,
                                                const char *urlhost,
                                                const char *urlpath,
-                                               int forceFetch );
+                                               const char *useragent );
 
 #endif /** !_zxdbfs_gameid_h */

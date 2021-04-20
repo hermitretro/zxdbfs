@@ -31,17 +31,17 @@ extern "C" {
 TEST(zxdbfs_http_tests, test_getURL_error) {
 
     /** Bad parameters */
-    json_object *rv0 = getURL( NULL, NULL, NULL );
+    json_object *rv0 = getURL( NULL, NULL, NULL, NULL );
     ASSERT_TRUE( NULL == rv0 );
 
-    json_object *rv1 = getURL( NULL, "file://", NULL );
+    json_object *rv1 = getURL( NULL, "file://", NULL, NULL );
     ASSERT_TRUE( NULL == rv1 );
 
-    json_object *rv2 = getURL( NULL, NULL, "/path" );
+    json_object *rv2 = getURL( NULL, NULL, "/path", NULL );
     ASSERT_TRUE( NULL == rv2 );
 
     /** File not found */
-    json_object *rv3 = getURL( NULL, "file://", "/tmp/doesnotexist.json" );
+    json_object *rv3 = getURL( NULL, "file://", "/tmp/doesnotexist.json", NULL );
     ASSERT_TRUE( NULL == rv3 );
 
 }
@@ -57,7 +57,7 @@ TEST(zxdbfs_http_tests, test_getURL_uncached) {
     int rv = createTestFile( fname, jsonData ); 
     ASSERT_EQ( 0, rv );
 
-    json_object *rv0 = getURL( NULL, "file://", fname );
+    json_object *rv0 = getURL( NULL, "file://", fname, NULL );
     ASSERT_TRUE( NULL != rv0 );
 
     ASSERT_EQ( 0, unlinkTestFile( fname ) );
@@ -79,7 +79,7 @@ TEST(zxdbfs_http_tests, test_getURL_cached) {
     int rv = createTestFile( fname, jsonData ); 
     ASSERT_EQ( 0, rv );
 
-    json_object *rv0 = getURL( urlcache, "file://", fname );
+    json_object *rv0 = getURL( urlcache, "file://", fname, NULL );
     ASSERT_TRUE( NULL != rv0 );
     json_object_put( rv0 );
 
@@ -89,7 +89,7 @@ TEST(zxdbfs_http_tests, test_getURL_cached) {
     ASSERT_EQ( 1, json_object_object_length( urlcache ) );
 
     /** Refetch from the cache */
-    json_object *cachedata = getURL( urlcache, "file://", fname );
+    json_object *cachedata = getURL( urlcache, "file://", fname, NULL );
     ASSERT_TRUE( NULL != cachedata );
     json_object_put( cachedata );
 
