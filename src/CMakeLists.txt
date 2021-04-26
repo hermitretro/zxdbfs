@@ -21,9 +21,9 @@ include_directories(${PROJECT_SOURCE_DIR}/src ${PROJECT_SOURCE_DIR} ${PROJECT_SO
 add_compile_options(-D_FILE_OFFSET_BITS=64 -Wno-pointer-to-int-cast -Wno-int-to-pointer-cast -g)
 
 list(APPEND ZXDBFS_SOURCES
-"${CMAKE_CURRENT_LIST_DIR}/zxdbfs.c"
+"${CMAKE_CURRENT_LIST_DIR}/zxdbfsd.c"
 )
 
 link_directories(${PROJECT_SOURCE_DIR}/json-c ${PROJECT_SOURCE_DIR}/lib)
-add_executable(zxdbfs ${ZXDBFS_SOURCES})
-target_link_libraries(zxdbfs fuse3 json-c zxdbfslib curl)
+add_executable(zxdbfsd ${ZXDBFS_SOURCES})
+target_link_libraries(zxdbfsd fuse3 json-c zxdbfslib curl)

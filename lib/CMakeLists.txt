@@ -29,6 +29,7 @@ list(APPEND ZXDBFSLIB_SOURCES
 "${CMAKE_CURRENT_LIST_DIR}/zxdbfs_json.c"
 "${CMAKE_CURRENT_LIST_DIR}/zxdbfs_paths.c"
 "${CMAKE_CURRENT_LIST_DIR}/zxdbfs_search.c"
+"${CMAKE_CURRENT_LIST_DIR}/zxdbfs_status.c"
 )
 
 add_library(zxdbfslib STATIC ${ZXDBFSLIB_SOURCES})

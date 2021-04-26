@@ -19,11 +19,12 @@ This is a very experimental repository. Currently working:
 * Directory listing with attributes
 * File read (cp, cat, etc....)
 * Magic Search functionality
+* Magic Status functionality
 * Caching
 
 # Building and running
 
-`zxdbfs` has some system requirements.
+ZXDBFS has some system requirements.
 
 ```
 % cd $HOME
@@ -57,36 +58,36 @@ This project builds using cmake:
 
 ## libfuse3 filesystem
 
-That should result in an executable `zxdbfs` in the `build` directory.
+That should result in an executable `zxdbfsd` in the `build` directory.
 
 To run it:
 
 ```
-% zxdbfs mountpoint
+% zxdbfsd mountpoint
 ```
 
-where `mountpoint` should be an existing directory. By default, `zxdbfs`
+where `mountpoint` should be an existing directory. By default, `zxdbfsd`
 will background. You can unmount the filesystem with:
 
 ```
 % fusermount3 -u mountpoint
 ```
 
-You can run `zxdbfs` in the foreground via:
+You can run `zxdbfsd` in the foreground via:
 
 ```
-% zxdbfs -d mountpoint
+% zxdbfsd -d mountpoint
 ```
 
 which is also handy for debugging and killing directly with `Ctrl-C`.
 
 The directory you mount onto will not be destroyed, but it will be unavailable
-whilst `zxdbfs` runs. It will become available once `zxdbfs` is
+whilst `zxdbfsd` runs. It will become available once `zxdbfsd` is
 unmounted or exits.
 
 # Using the filesystem
 
-## Throttling
+## Throttling (Not yet implemented)
 
 The filesystem will throttle automatically to avoid heavy load onto ZXDB.
 For example, we recommend NOT using commands such as `find`
@@ -96,11 +97,12 @@ a large number of requests to ZXDB.
 ## UNIX Commands
 
 Standard UNIX commands will interact with the filesystem and present
-data as expected. 
+data as expected. Be careful with deep-trawl commands such as `tree`
+and `find`.
 
 ## Structure
 
-The filesystem is organised with two top-level directories.
+The filesystem is organised with three top-level directories.
 
 ### /by-letter
 
@@ -113,7 +115,7 @@ corresponds to a program entry in ZXDB.
 
 ### /search
 
-The /search root directory is "magic" and allows you to query ZXDB via a
+The `/search` root directory is "magic" and allows you to query ZXDB via a
 file-like interface.
 
 For example, to search for "Gargoyle Games" you should just append the search
@@ -122,6 +124,26 @@ the search and return the games as directories under `/search/Gargoyle\ Games`.
 
 To see which searches have already occurred, simply list the directories in
 `/search`.
+
+### /status
+
+The `/status` root directory provides three files that can be used to
+interrogate the status of the WiFi subsystem and ZXDBFS.
+
+`/status/json` is a magic file containing the WiFi configuration from 
+`wpa_cli status` plus process information on whether `ntpd`, 
+`spi-fat-fuse` and `zxdbfsd` are running in JSON format. This mode also
+performs a call to ZXDB to retrieve the version number.
+
+`/status/text` is a magic file containing the WiFi configuration from
+`wpa_cli status` plus process information on whether `ntpd`, 
+`spi-fat-fuse` and `zxdbfsd` are running in a plain text format. This mode
+also performs a call to ZXDB to retrieve the version number.
+
+`/status/summary` will return a file containing either "0" or "1". "0"
+will be returned if `ntpd`, `zxdbfsd` and `spi-fat-fuse` are running
+plus the `wpa_state` from `wpa_cli status` is `COMPLETED`. If any of
+these are not true, "1" will be returned.
 
 ### Hidden utility directories
 

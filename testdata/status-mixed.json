@@ -1,0 +1,23 @@
+{
+    "type" : "zxdbfsstatus",
+    "wpa_cli":{
+        "bssid" : "80:75:1f:51:b6:8a",
+        "freq" : "2462",
+        "ssid" : "12SSID34",
+        "id" : "0",
+        "mode" : "station",
+        "pairwise_cipher" : "CCMP",
+        "group_cipher" : "CCMP",
+        "key_mgmt" : "WPA2-PSK",
+        "wpa_state" : "COMPLETED",
+        "ip_address" : "192.168.0.22",
+        "p2p_device_address" : "82:cd:92:3f:82:f9",
+        "address" : "b8:27:eb:36:bb:c7",
+        "uuid" : "d59f8fd2-3143-56ae-bd72-af0cd26e8870"
+    },
+    "ntpdok": false,
+    "dateok" : false,
+    "zxdbfsdok": false,
+    "zxdbversion": "unknown",
+    "spidok": false
+}
