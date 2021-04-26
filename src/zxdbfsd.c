@@ -85,7 +85,6 @@ static const struct fuse_opt option_spec[] = {
 static json_object *urlcache = NULL;
 static FSCache_t *fscache = NULL;
 static FSCache_t *bylettercache = NULL;
-int latestStatusSize = 0;
 
 /**
  * Preload the by-letter cache
@@ -428,24 +427,37 @@ static FSCacheEntry_t *_getAndCreateGame( const char *path, struct stat *stbuf )
 /**
  * Refresh zxdbfsstatus info
  */
-int _getStatusSize( int mode ) {
+int _getStatus( int mode ) {
 
     const char *tempStatusFile = "/tmp/zxdbfsstatus.txt";
 
     unlink( tempStatusFile );
 
     char cmd[256];
-    if ( mode == 0 ) {
-        sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus > %s", tempStatusFile );
-    } else {
-        sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -b > %s", tempStatusFile );
+    switch ( mode ) {
+        default:
+        case 0: {
+            sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -j > %s", 
+                     tempStatusFile );
+            break;
+        }
+        case 1: {
+            sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -t > %s", 
+                     tempStatusFile );
+            break;
+        }
+        case 2: {
+            sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -s > %s", 
+                     tempStatusFile );
+            break;
+        }
     }
 
     system( cmd );
 
     struct stat st;
     stat( tempStatusFile, &st );
-    latestStatusSize = st.st_size;
+    //latestStatusSize = st.st_size;
     return st.st_size;
 }
 
@@ -498,16 +510,21 @@ static int zxdb_fuse_getattr(const char *path, struct stat *stbuf,
     /** Handle the magic /status directories */
     if ( strncmp( path, "/status", 7 ) == 0 ) {
         if ( strncmp( path, "/status/json", 12 ) == 0 ) {
-
             stbuf->st_mode = S_IFREG | 0644;
             stbuf->st_nlink = 1;
-            stbuf->st_size = _getStatusSize( 0 );
+            stbuf->st_size = 1024;
             return 0;
         }
-        if ( strncmp( path, "/status/binary", 14 ) == 0 ) {
+        if ( strncmp( path, "/status/text", 12 ) == 0 ) {
             stbuf->st_mode = S_IFREG | 0644;
             stbuf->st_nlink = 1;
-            stbuf->st_size = 0;
+            stbuf->st_size = 1024;
+            return 0;
+        }
+        if ( strncmp( path, "/status/summary", 15 ) == 0 ) {
+            stbuf->st_mode = S_IFREG | 0644;
+            stbuf->st_nlink = 1;
+            stbuf->st_size = 1;
             return 0;
         }
 
@@ -718,13 +735,16 @@ static int zxdb_fuse_readdir( const char *path, void *buf,
 
         st.st_mode = S_IFREG | 0644;
         st.st_nlink = 1;
-        st.st_size = latestStatusSize;
+        st.st_size = 1024;
 
-        if ( filler( buf, "binary", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
-            printf( "failed to inject /status/binary\n" );
+        if ( filler( buf, "text", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
+            printf( "failed to inject /status/text\n" );
         }
         if ( filler( buf, "json", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
             printf( "failed to inject /status/json\n" );
+        }
+        if ( filler( buf, "summary", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
+            printf( "failed to inject /status/summary\n" );
         }
 
         return 0;
@@ -798,6 +818,15 @@ static int zxdb_fuse_open(const char *path, struct fuse_file_info *fi)
     } else {
         /** Magic status directory */
         rooturl = strdup( "file://" );
+        if ( strcmp( "/status/text", path ) == 0 ) {
+            _getStatus( 1 );
+        } else {
+            if ( strcmp( "/status/summary", path ) == 0 ) {
+                _getStatus( 2 );
+            } else {
+                _getStatus( 0 );
+            }
+        }
         fscurl = strdup( "/tmp/zxdbfsstatus.txt" );
     }
 

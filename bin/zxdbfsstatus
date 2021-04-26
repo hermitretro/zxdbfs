@@ -21,10 +21,34 @@
 #     You should have received a copy of the GNU General Public License
 #     along with zxdbfs.  If not, see <https://www.gnu.org/licenses/>.
 
+OPTS=$(getopt -l "help,json,text,summary" -o "hjts" -a -- "$@")
+#echo "$OPTS"
+
+OUTPUTFORMAT="json"
+
+while true; do
+  case "$1" in
+    -h | --help )    echo "Usage: $0 [--help] [--version-tag <version-tag>] [--no-cache] [--variant <build_replicade|build_wilderness>] [--with-elk]"; exit 1 ;;
+    -j | --json ) OUTPUTFORMAT="json" ; shift ;;
+    -t | --text ) OUTPUTFORMAT="text" ; shift ;;
+    -s | --summary ) OUTPUTFORMAT="summary" ; shift ;;
+    -- ) shift; break ;;
+    * ) break ;;
+  esac
+done
+
+WPA_STATE="unknown"
+
 # WiFi connection data
 n_wpa_cli_lines=0
 for l in `/sbin/wpa_cli -i wlan0 status`; do
     if [ $l != "" ]; then
+        # Extract wpa_state here...
+        key=`echo $l | awk -F= '{ print $1 }'`
+        if [ $key = "wpa_state" ]; then
+            WPA_STATE=`echo $l | awk -F= '{ print $2 }'`
+        fi
+        # Store value for later output
         eval wpa_cli_lines_${n_wpa_cli_lines}=`echo "\"$l\""`
         n_wpa_cli_lines=`expr $n_wpa_cli_lines + 1`
     fi
@@ -42,12 +66,14 @@ fi
 # zxdbfsd status
 ZXDBFSD_PS=`ps ax | grep zxdbfsd | grep -v grep`
 ZXDBFSD_PS=`echo -n "***${ZXDBFSD_PS}***"`
+ZXDB_VERSION="unknown"
 if [ "$(echo "$ZXDBFSD_PS" | cut -c1-7)" = "******" ]; then
     ZXDBFSD_OK="false"
-    ZXDB_VERSION="unknown"
 else
     ZXDBFSD_OK="true"
-    ZXDB_VERSION=`curl -Ls -m 5 -A "zxdbfs" http://api.zxinfo.dk/v3/version`
+    if [ $OUTPUTFORMAT != "summary" ]; then
+        ZXDB_VERSION=`curl -Ls -m 5 -A "zxdbfs" http://api.zxinfo.dk/v3/version`
+    fi
 fi
 
 # spi-fat-fuse status
@@ -59,37 +85,71 @@ else
     SPID_OK="true"
 fi
 
-# Dump JSON
-echo "{"
-echo "    \"type\" : \"zxdbfsstatus\","
+if [ $OUTPUTFORMAT = "json" ]; then
+    # Dump JSON
+    echo "{"
+    echo "    \"type\" : \"zxdbfsstatus\","
 
-# Dump wpa_cli JSON
-# Remove one from the list as 'seq' is <=, not <
-n_wpa_cli_lines=`expr $n_wpa_cli_lines - 1`
-n_wpa_cli_lines_minus_1=`expr $n_wpa_cli_lines - 1`
-echo "    \"wpa_cli\":{"
-for i in `seq 0 $n_wpa_cli_lines`; do
-    eval keye="\$wpa_cli_lines_$i"
-    key=`echo $keye | awk -F= '{ print $1 }'`
-    val=`echo $keye | awk -F= '{ print $2 }'`
-    echo -n "        \"$key\" : "
-    echo -n "\"$val\""
-    if [ $i -le $n_wpa_cli_lines_minus_1 ]; then
-        echo ","
+    # Dump wpa_cli JSON
+    # Remove one from the list as 'seq' is <=, not <
+    n_wpa_cli_lines=`expr $n_wpa_cli_lines - 1`
+    n_wpa_cli_lines_minus_1=`expr $n_wpa_cli_lines - 1`
+    echo "    \"wpa_cli\":{"
+    for i in `seq 0 $n_wpa_cli_lines`; do
+        eval keye="\$wpa_cli_lines_$i"
+        key=`echo $keye | awk -F= '{ print $1 }'`
+        val=`echo $keye | awk -F= '{ print $2 }'`
+        echo -n "        \"$key\" : "
+        echo -n "\"$val\""
+        if [ $i -le $n_wpa_cli_lines_minus_1 ]; then
+            echo ","
+        else
+            echo ""
+        fi
+    done
+    echo "    },"
+
+    # Dump ntpd JSON
+    echo "    \"ntpdok\": ${NTPD_OK},"
+    # Dump zxdbfsd JSON
+    echo "    \"zxdbfsdok\": ${ZXDBFSD_OK},"
+    echo "    \"zxdbversion\": \"${ZXDB_VERSION}\","
+    # Dump spi-fat-fuse JSON
+    echo "    \"spidok\": ${SPID_OK}"
+    
+    echo "}"
+fi
+
+if [ $OUTPUTFORMAT = "summary" ]; then
+    if [ ${NTPD_OK} = "true" -a ${ZXDBFSD_OK} = "true" ]; then
+        if [ ${SPID_OK} = "true" -a ${WPA_STATE} = "COMPLETED" ]; then
+            echo "0"
+        else
+            echo "1"
+        fi
     else
-        echo ""
+        echo "1"
     fi
-done
-echo "    },"
+fi
 
-# Dump ntpd JSON
-echo "    \"ntpdok\": ${NTPD_OK},"
-# Dump zxdbfsd JSON
-echo "    \"zxdbfsdok\": ${ZXDBFSD_OK},"
-echo "    \"zxdbversion\": \"${ZXDB_VERSION}\","
-# Dump spi-fat-fuse JSON
-echo "    \"spidok\": ${SPID_OK}"
+if [ $OUTPUTFORMAT = "text" ]; then
+    # Dump wpa_cli JSON
+    # Remove one from the list as 'seq' is <=, not <
+    n_wpa_cli_lines=`expr $n_wpa_cli_lines - 1`
+    n_wpa_cli_lines_minus_1=`expr $n_wpa_cli_lines - 1`
+    echo "wpa_cli parameters"
+    for i in `seq 0 $n_wpa_cli_lines`; do
+        eval keye="\$wpa_cli_lines_$i"
+        echo "    $keye"
+    done
 
-echo "}"
+    # Dump ntpd JSON
+    echo "ntpdok=${NTPD_OK}"
+    # Dump zxdbfsd JSON
+    echo "zxdbfsdok= ${ZXDBFSD_OK}"
+    echo "zxdbversion=${ZXDB_VERSION}"
+    # Dump spi-fat-fuse JSON
+    echo "spidok=${SPID_OK}"
+fi
 
 exit 0
