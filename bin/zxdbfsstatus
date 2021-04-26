@@ -1,0 +1,95 @@
+#!/bin/sh
+#
+# Wrapper script around various system commands to gather data about
+# networking and system state and returns said data as a JSON packet
+# to ZXDBFS for use in the /status directory
+#
+# Copyright (c)2021- Alligator Descartes <http://www.hermitretro.com>
+#
+# This file is part of zxdbfs.
+#
+#     zxdbfs is free software: you can redistribute it and/or modify
+#     it under the terms of the GNU General Public License as published by
+#     the Free Software Foundation, either version 3 of the License, or
+#     (at your option) any later version.
+#
+#     zxdbfs is distributed in the hope that it will be useful,
+#     but WITHOUT ANY WARRANTY; without even the implied warranty of
+#     MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+#     GNU General Public License for more details.
+#
+#     You should have received a copy of the GNU General Public License
+#     along with zxdbfs.  If not, see <https://www.gnu.org/licenses/>.
+
+# WiFi connection data
+n_wpa_cli_lines=0
+for l in `/sbin/wpa_cli -i wlan0 status`; do
+    if [ $l != "" ]; then
+        eval wpa_cli_lines_${n_wpa_cli_lines}=`echo "\"$l\""`
+        n_wpa_cli_lines=`expr $n_wpa_cli_lines + 1`
+    fi
+done
+
+# ntpd status
+NTPD_PS=`ps ax | grep ntpd | grep -v grep`
+NTPD_PS=`echo -n "***${NTPD_PS}***"`
+if [ "$(echo "$NTPD_PS" | cut -c1-7)" = "******" ]; then
+    NTPD_OK="false"
+else
+    NTPD_OK="true"
+fi
+
+# zxdbfsd status
+ZXDBFSD_PS=`ps ax | grep zxdbfsd | grep -v grep`
+ZXDBFSD_PS=`echo -n "***${ZXDBFSD_PS}***"`
+if [ "$(echo "$ZXDBFSD_PS" | cut -c1-7)" = "******" ]; then
+    ZXDBFSD_OK="false"
+    ZXDB_VERSION="unknown"
+else
+    ZXDBFSD_OK="true"
+    ZXDB_VERSION=`curl -Ls -m 5 -A "zxdbfs" http://api.zxinfo.dk/v3/version`
+fi
+
+# spi-fat-fuse status
+SPID_PS=`ps ax | grep spi-fat-fuse | grep -v grep`
+SPID_PS=`echo -n "***${SPID_PS}***"`
+if [ "$(echo "$SPID_PS" | cut -c1-7)" = "******" ]; then
+    SPID_OK="false"
+else
+    SPID_OK="true"
+fi
+
+# Dump JSON
+echo "{"
+echo "    \"type\" : \"zxdbfsstatus\","
+
+# Dump wpa_cli JSON
+# Remove one from the list as 'seq' is <=, not <
+n_wpa_cli_lines=`expr $n_wpa_cli_lines - 1`
+n_wpa_cli_lines_minus_1=`expr $n_wpa_cli_lines - 1`
+echo "    \"wpa_cli\":{"
+for i in `seq 0 $n_wpa_cli_lines`; do
+    eval keye="\$wpa_cli_lines_$i"
+    key=`echo $keye | awk -F= '{ print $1 }'`
+    val=`echo $keye | awk -F= '{ print $2 }'`
+    echo -n "        \"$key\" : "
+    echo -n "\"$val\""
+    if [ $i -le $n_wpa_cli_lines_minus_1 ]; then
+        echo ","
+    else
+        echo ""
+    fi
+done
+echo "    },"
+
+# Dump ntpd JSON
+echo "    \"ntpdok\": ${NTPD_OK},"
+# Dump zxdbfsd JSON
+echo "    \"zxdbfsdok\": ${ZXDBFSD_OK},"
+echo "    \"zxdbversion\": \"${ZXDB_VERSION}\","
+# Dump spi-fat-fuse JSON
+echo "    \"spidok\": ${SPID_OK}"
+
+echo "}"
+
+exit 0

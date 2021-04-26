@@ -38,6 +38,7 @@
 #include <fcntl.h>
 #include <stddef.h>
 #include <assert.h>
+#include <unistd.h>
 
 #include <json-c/json.h>
 
@@ -84,6 +85,7 @@ static const struct fuse_opt option_spec[] = {
 static json_object *urlcache = NULL;
 static FSCache_t *fscache = NULL;
 static FSCache_t *bylettercache = NULL;
+int latestStatusSize = 0;
 
 /**
  * Preload the by-letter cache
@@ -423,6 +425,30 @@ static FSCacheEntry_t *_getAndCreateGame( const char *path, struct stat *stbuf )
     }
 }
 
+/**
+ * Refresh zxdbfsstatus info
+ */
+int _getStatusSize( int mode ) {
+
+    const char *tempStatusFile = "/tmp/zxdbfsstatus.txt";
+
+    unlink( tempStatusFile );
+
+    char cmd[256];
+    if ( mode == 0 ) {
+        sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus > %s", tempStatusFile );
+    } else {
+        sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -b > %s", tempStatusFile );
+    }
+
+    system( cmd );
+
+    struct stat st;
+    stat( tempStatusFile, &st );
+    latestStatusSize = st.st_size;
+    return st.st_size;
+}
+
 static int zxdb_fuse_getattr(const char *path, struct stat *stbuf,
 			 struct fuse_file_info *fi)
 {
@@ -440,6 +466,9 @@ static int zxdb_fuse_getattr(const char *path, struct stat *stbuf,
         return 0;
      }
 
+    /**
+     * Handle the magic /cache directories
+     */
     if ( strncmp( path, "/cache", 6 ) == 0 ) {
         if ( strncmp( path, "/cache/fscache", 14 ) == 0 ) {
             if ( strcmp( path, "/cache/fscache/flush" ) == 0 ) {
@@ -459,6 +488,27 @@ static int zxdb_fuse_getattr(const char *path, struct stat *stbuf,
                 json_object_put( urlcache );
                 urlcache = json_object_new_object();
             }
+        }
+
+        stbuf->st_mode = S_IFDIR | 0755;
+        stbuf->st_nlink = 2;
+        return 0;
+    }
+
+    /** Handle the magic /status directories */
+    if ( strncmp( path, "/status", 7 ) == 0 ) {
+        if ( strncmp( path, "/status/json", 12 ) == 0 ) {
+
+            stbuf->st_mode = S_IFREG | 0644;
+            stbuf->st_nlink = 1;
+            stbuf->st_size = _getStatusSize( 0 );
+            return 0;
+        }
+        if ( strncmp( path, "/status/binary", 14 ) == 0 ) {
+            stbuf->st_mode = S_IFREG | 0644;
+            stbuf->st_nlink = 1;
+            stbuf->st_size = 0;
+            return 0;
         }
 
         stbuf->st_mode = S_IFDIR | 0755;
@@ -608,10 +658,13 @@ static int zxdb_fuse_readdir( const char *path, void *buf,
 
         if ( offset == 0 ) {
             if ( filler( buf, "by-letter", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
-                printf( "failed to inject .\n" );
+                printf( "failed to inject by-letter\n" );
             }
             if ( filler( buf, "search", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
-                printf( "failed to inject .\n" );
+                printf( "failed to inject search\n" );
+            }
+            if ( filler( buf, "status", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
+                printf( "failed to inject status\n" );
             }
         }
 
@@ -655,6 +708,28 @@ static int zxdb_fuse_readdir( const char *path, void *buf,
         return _readdirFSCache( path, buf, filler, offset, fi, flags, nfileinfo );
     }
 
+    /** Handle /status -- contains two magic files */
+    if ( strcmp( path, "/status" ) == 0 ) {
+        printf( "readdir: in /status\n" );
+
+        if ( offset > 0 ) {
+            return 0;
+        }
+
+        st.st_mode = S_IFREG | 0644;
+        st.st_nlink = 1;
+        st.st_size = latestStatusSize;
+
+        if ( filler( buf, "binary", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
+            printf( "failed to inject /status/binary\n" );
+        }
+        if ( filler( buf, "json", &st, nfileinfo++, FUSE_FILL_DIR_PLUS ) ) {
+            printf( "failed to inject /status/json\n" );
+        }
+
+        return 0;
+    }
+
     /**
      * Which magic directory type are we in that calls into ZXDB?
      *
@@ -686,40 +761,53 @@ static int zxdb_fuse_open(const char *path, struct fuse_file_info *fi)
     int res;
     int i;
 
+    char *rooturl = NULL;
+    char *fscurl = NULL;
+    int fscsize = 0;
+
     printf( "fuse_open: %s (mode %d)\n", path, fi->flags );
 
-    /** Fetch the file info */
-    FSCacheEntry_t *fsCacheEntry = FSCache_get( fscache, path );
-    if ( fsCacheEntry == NULL ) {
-        printf( "fuse_open: fscache not populated!\n" );
-        return 0;
-    }
+    if ( strncmp( path, "/status", 7 ) != 0 ) {
+        /** Fetch the file info */
+        FSCacheEntry_t *fsCacheEntry = FSCache_get( fscache, path );
+        if ( fsCacheEntry == NULL ) {
+            printf( "fuse_open: fscache not populated!\n" );
+            return 0;
+        }
 
-    FSCacheEntryType fsctype = FSCacheEntry_gettype( fsCacheEntry );
-    const char *fscurl = FSCacheEntry_geturl( fsCacheEntry );
-    if ( fsctype != FSCACHEENTRY_FILE || fscurl == NULL ) {
-        printf( "Malformed fscache object: %d, %s\n", fsctype, fscurl );
-        dumpJSON( fsCacheEntry );
-        return 0;
-    }
+        FSCacheEntryType fsctype = FSCacheEntry_gettype( fsCacheEntry );
+        fscurl = FSCacheEntry_geturl( fsCacheEntry );
+        if ( fsctype != FSCACHEENTRY_FILE || fscurl == NULL ) {
+            printf( "Malformed fscache object: %d, %s\n", fsctype, fscurl );
+            dumpJSON( fsCacheEntry );
+            return 0;
+        }
 
-    printf( "URL: %s\n", fscurl );
+        printf( "URL: %s\n", fscurl );
 
-    /** Figure out where the actual file is... */
-    char *rooturl = getRootDownloadURL( fscurl );
-    if ( rooturl != NULL ) {
-        printf( "actual URL: %s%s\n", rooturl, fscurl );
+        /** Figure out where the actual file is... */
+        rooturl = getRootDownloadURL( fscurl );
+        if ( rooturl != NULL ) {
+            printf( "actual URL: %s%s\n", rooturl, fscurl );
+        } else {
+            printf( "cannot determine root url\n" );
+            return -ENOENT;
+        }
+
+        fscsize = FSCacheEntry_getsize( fsCacheEntry );
     } else {
-        printf( "cannot determine root url\n" );
-        return -ENOENT;
+        /** Magic status directory */
+        rooturl = strdup( "file://" );
+        fscurl = strdup( "/tmp/zxdbfsstatus.txt" );
     }
 
     /** Retrieve the URL via cURL */
     struct MemoryStruct *chunk = getURLViacURL( rooturl, fscurl, options.useragent );
     if ( chunk != NULL ) {
-        int fscsize = FSCacheEntry_getsize( fsCacheEntry );
-        if ( fscsize != chunk->size ) {
-            printf( "chunk/metadata mismatch: %ld != %d\n", chunk->size, fscsize );
+        if ( fscsize != 0 ) {
+            if ( fscsize != chunk->size ) {
+                printf( "chunk/metadata mismatch: %ld != %d\n", chunk->size, fscsize );
+            }
         }
         fi->fh = (unsigned long)chunk;
     } else {

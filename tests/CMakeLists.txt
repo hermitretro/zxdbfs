@@ -31,6 +31,7 @@ ${CMAKE_CURRENT_LIST_DIR}/zxdbfs_gameid_tests.cpp
 ${CMAKE_CURRENT_LIST_DIR}/zxdbfs_http_tests.cpp
 ${CMAKE_CURRENT_LIST_DIR}/zxdbfs_paths_tests.cpp
 ${CMAKE_CURRENT_LIST_DIR}/zxdbfs_search_tests.cpp
+${CMAKE_CURRENT_LIST_DIR}/zxdbfs_status_tests.cpp
 ${CMAKE_CURRENT_LIST_DIR}/zxdbfs_tests_utils.cpp
 /usr/src/googletest/googletest/src/gtest-all.cc
 /usr/src/googletest/googletest/src/gtest_main.cc
