@@ -796,7 +796,7 @@ static int zxdb_fuse_open(const char *path, struct fuse_file_info *fi)
         }
 
         FSCacheEntryType fsctype = FSCacheEntry_gettype( fsCacheEntry );
-        fscurl = FSCacheEntry_geturl( fsCacheEntry );
+        fscurl = (char *)FSCacheEntry_geturl( fsCacheEntry );
         if ( fsctype != FSCACHEENTRY_FILE || fscurl == NULL ) {
             printf( "Malformed fscache object: %d, %s\n", fsctype, fscurl );
             dumpJSON( fsCacheEntry );

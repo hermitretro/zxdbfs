@@ -31,6 +31,7 @@ typedef struct ZXDBFSStatus {
     char wpaState[16];
     char ipAddress[32];
     int ntpdok;
+    int dateok;
     int zxdbfsdok;
     int spidok;
     char zxdbVersion[16];

@@ -147,6 +147,14 @@ ZXDBFSStatus_t *ZXDBFSStatus_createFromJSON( json_object *statusRoot_o ) {
         status->ntpdok = json_object_get_int( ntpdok_o );
     }
 
+    json_object *dateok_o = json_object_object_get( statusRoot_o, "dateok" );
+    if ( dateok_o == NULL ) {
+        ZXDBFSStatus_free( status );
+        return NULL;
+    } else {
+        status->dateok = json_object_get_int( dateok_o );
+    }
+
     json_object *zxdbfsdok_o = json_object_object_get( statusRoot_o, "zxdbfsdok" );
     if ( zxdbfsdok_o == NULL ) {
         ZXDBFSStatus_free( status );

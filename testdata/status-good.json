@@ -16,6 +16,7 @@
         "uuid" : "d59f8fd2-3143-56ae-bd72-af0cd26e8870"
     },
     "ntpdok": true,
+    "dateok" : true,
     "zxdbfsdok": true,
     "zxdbversion": "1.0.89",
     "spidok": true

@@ -54,6 +54,15 @@ for l in `/sbin/wpa_cli -i wlan0 status`; do
     fi
 done
 
+# Valid date?
+DATE_OK="false"
+BASE_DATE=`date +%s -d '2021-04-25 09:30:00'`
+NOW=`date +%s`
+DIFF=`expr $NOW - $BASE_DATE`
+if [ $DIFF -ge 0 ]; then
+    DATE_OK="true"
+fi
+
 # ntpd status
 NTPD_PS=`ps ax | grep ntpd | grep -v grep`
 NTPD_PS=`echo -n "***${NTPD_PS}***"`
@@ -111,6 +120,7 @@ if [ $OUTPUTFORMAT = "json" ]; then
 
     # Dump ntpd JSON
     echo "    \"ntpdok\": ${NTPD_OK},"
+    echo "    \"dateok\": ${DATE_OK},"
     # Dump zxdbfsd JSON
     echo "    \"zxdbfsdok\": ${ZXDBFSD_OK},"
     echo "    \"zxdbversion\": \"${ZXDB_VERSION}\","
@@ -123,7 +133,11 @@ fi
 if [ $OUTPUTFORMAT = "summary" ]; then
     if [ ${NTPD_OK} = "true" -a ${ZXDBFSD_OK} = "true" ]; then
         if [ ${SPID_OK} = "true" -a ${WPA_STATE} = "COMPLETED" ]; then
-            echo "0"
+            if [ ${DATE_OK} = "true" ]; then
+                echo "0"
+            else
+                echo "1"
+            fi
         else
             echo "1"
         fi
@@ -145,6 +159,7 @@ if [ $OUTPUTFORMAT = "text" ]; then
 
     # Dump ntpd JSON
     echo "ntpdok=${NTPD_OK}"
+    echo "dateok=${DATE_OK}"
     # Dump zxdbfsd JSON
     echo "zxdbfsdok= ${ZXDBFSD_OK}"
     echo "zxdbversion=${ZXDB_VERSION}"
