@@ -437,17 +437,17 @@ int _getStatus( int mode ) {
     switch ( mode ) {
         default:
         case 0: {
-            sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -j > %s", 
+            sprintf( cmd, "/usr/bin/zxdbfsstatus -j > %s", 
                      tempStatusFile );
             break;
         }
         case 1: {
-            sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -t > %s", 
+            sprintf( cmd, "/usr/bin/zxdbfsstatus -t > %s", 
                      tempStatusFile );
             break;
         }
         case 2: {
-            sprintf( cmd, "/home/pi/zxdbfs/bin/zxdbfsstatus -s > %s", 
+            sprintf( cmd, "/usr/bin/zxdbfsstatus -s > %s", 
                      tempStatusFile );
             break;
         }
