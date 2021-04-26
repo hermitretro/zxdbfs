@@ -161,7 +161,7 @@ if [ $OUTPUTFORMAT = "text" ]; then
     echo "ntpdok=${NTPD_OK}"
     echo "dateok=${DATE_OK}"
     # Dump zxdbfsd JSON
-    echo "zxdbfsdok= ${ZXDBFSD_OK}"
+    echo "zxdbfsdok=${ZXDBFSD_OK}"
     echo "zxdbversion=${ZXDB_VERSION}"
     # Dump spi-fat-fuse JSON
     echo "spidok=${SPID_OK}"
