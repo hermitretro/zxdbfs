@@ -725,7 +725,7 @@ static int zxdb_fuse_readdir( const char *path, void *buf,
         return _readdirFSCache( path, buf, filler, offset, fi, flags, nfileinfo );
     }
 
-    /** Handle /status -- contains two magic files */
+    /** Handle /status -- contains three magic files */
     if ( strcmp( path, "/status" ) == 0 ) {
         printf( "readdir: in /status\n" );
 
