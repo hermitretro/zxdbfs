@@ -41,7 +41,7 @@ WPA_STATE="unknown"
 
 # WiFi connection data
 n_wpa_cli_lines=0
-for l in `/sbin/wpa_cli -i wlan0 status`; do
+for l in `/usr/sbin/wpa_cli -i wlan0 status`; do
     if [ $l != "" ]; then
         # Extract wpa_state here...
         key=`echo $l | awk -F= '{ print $1 }'`
